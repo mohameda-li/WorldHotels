@@ -205,3 +205,14 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ────────── Custom Project Ignores ────────── #
+
+# 🔒 Secrets
+.env
+
+# 💻 Editor + OS
+.vscode/
+.idea/
+.DS_Store
+__MACOSX/
