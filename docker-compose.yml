@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: worldhotels-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: your_root_password
+      MYSQL_DATABASE: WorldHotels
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./docker_sql:/docker-entrypoint-initdb.d
+    networks:
+      - whnet  # ← ADD THIS
+
+  web:
+    build: .
+    container_name: worldhotels-web
+    restart: always
+    ports:
+      - "5001:5001"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - whnet
+
+volumes:
+  db_data:
+
+networks:
+  whnet:

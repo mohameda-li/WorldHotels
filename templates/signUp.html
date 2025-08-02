@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!-- By Mahamed Ali Student ID:2301846 -->
+<html lang="en">
+<head>
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/projectMainPagecss.css') }}">
+</head>
+<body>
+    <section class="banner">
+
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar-nav">
+            <a href="/"><img src="{{ url_for('static', filename='stimages/W_logo.jpg') }}" class="logo"></a>
+            <div class="navbar" id="Navlinks">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    {% if 'user_id' in session %}
+                        <li><a href="/logout">Logout</a></li>
+                        {% if session['role'] == 'admin' %}
+                            <li><a href="/admin_dashboard">Admin Dashboard</a></li>
+                            <li><a href="/manage_hotels">Manage Hotels</a></li>
+                            <li><a href="/manage_bookings">Manage Bookings</a></li>
+                            <li><a href="/manage_users">Manage Users</a></li>
+                        {% endif %}
+                        <li><a href="/my_bookings">My Bookings</a></li>
+                    {% else %}
+                        <li><a href="/login.html">Login/Register</a></li>
+                    {% endif %}
+                    <li><a href="/Information.html">Information</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Sign Up Form -->
+        <div class="content">
+            <h1>Sign Up</h1>
+            <form action="/signUp" method="post" onsubmit="return validateForm()" style="max-width: 400px; margin: 0 auto; text-align: left;">
+                <div class="input-box" style="margin: 15px 0;">
+                    <input type="text" name="FirstName" placeholder="First Name" required style="padding: 10px; width: 100%; border-radius: 5px; border: none;">
+                </div>
+                <div class="input-box" style="margin: 15px 0;">
+                    <input type="text" name="LastName" placeholder="Surname" required style="padding: 10px; width: 100%; border-radius: 5px; border: none;">
+                </div>
+                <div class="input-box" style="margin: 15px 0;">
+                    <input type="text" name="Username" placeholder="Username" required style="padding: 10px; width: 100%; border-radius: 5px; border: none;">
+                </div>
+                <div class="input-box" style="margin: 15px 0;">
+                    <input type="email" name="Email" placeholder="Email Address" required style="padding: 10px; width: 100%; border-radius: 5px; border: none;">
+                </div>
+                <div class="input-box" style="margin: 15px 0;">
+                    <input type="password" name="password" id="password" placeholder="Password" required style="padding: 10px; width: 100%; border-radius: 5px; border: none;">
+                </div>
+                <div class="input-box" style="margin: 15px 0;">
+                    <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required style="padding: 10px; width: 100%; border-radius: 5px; border: none;">
+                    <span id="message" style="color: red;"></span>
+                </div>
+                <div class="input-box" style="text-align: center;">
+                    <input type="submit" value="Submit" style="padding: 10px 20px; border: none; border-radius: 25px; background: #009688; color: white; font-weight: bold; cursor: pointer;">
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Password Validation Script -->
+    <script>
+        function validateForm() {
+            const pw = document.getElementById("password").value;
+            const cpw = document.getElementById("confirm_password").value;
+            if (pw !== cpw) {
+                document.getElementById("message").innerText = "Passwords do not match";
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

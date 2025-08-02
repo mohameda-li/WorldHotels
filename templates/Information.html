@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Information</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='projectMainPagecss.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='Information.css') }}">
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar-nav">
+        <a href="/"><img src="{{ url_for('static', filename='stimages/W_logo.jpg') }}" class="logo"></a>
+        <div class="navbar" id="Navlinks">
+            <ul>
+                <li><a href="/">Home</a></li>
+                {% if 'user_id' in session %}
+                    <li><a href="/logout">Logout</a></li>
+                    {% if session['role'] == 'admin' %}
+                        <li><a href="/admin_dashboard">Admin Dashboard</a></li>
+                        <li><a href="/manage_hotels">Manage Hotels</a></li>
+                        <li><a href="/manage_bookings">Manage Bookings</a></li>
+                        <li><a href="/manage_users">Manage Users</a></li>
+                    {% endif %}
+                    <li><a href="/my_bookings">My Bookings</a></li>
+                {% else %}
+                    <li><a href="/login.html">Login/Register</a></li>
+                {% endif %}
+                <li><a href="/Information.html">Information</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <div class="info-container">
+            <h1>Why Book With World Hotels?</h1>
+
+            <h2>Global Reach</h2>
+            <p>From New York to Tokyo, Paris to Cape Town — our platform connects you with <strong>top-rated hotels around the globe</strong>. Whether you're traveling for business, leisure, or a spontaneous getaway, we have the perfect room for you.</p>
+
+            <h2>Best Price Guarantee</h2>
+            <p>We work directly with trusted hotels to provide <strong>competitive pricing and exclusive deals</strong>. Book early and save more — no hidden fees, no surprises.</p>
+
+            <h2>Early Booking Discounts</h2>
+            <p>Enjoy automatic discounts when you book in advance:</p>
+            <ul>
+                <li><strong>80–90 days in advance</strong> – 30% off</li>
+                <li><strong>60–79 days in advance</strong> – 20% off</li>
+                <li><strong>45–59 days in advance</strong> – 10% off</li>
+                <li><strong>Less than 45 days</strong> – Standard pricing applies</li>
+            </ul>
+            <p>The earlier you plan, the more you save!</p>
+
+            <h2>Flexible Booking & Easy Cancellations</h2>
+            <ul>
+                <li><strong>Cancel before 60 days</strong> – No cancellation charge.</li>
+                <li><strong>Cancel between 30–60 days</strong> – Up to <strong>50%</strong> charge.</li>
+                <li><strong>Cancel within 30 days</strong> – <strong>100%</strong> booking price charged.</li>
+            </ul>
+            <p>Plans change — we understand. That’s why we provide clear cancellation terms and 24/7 support.</p>
+
+            <h2>Secure & Simple</h2>
+            <p>Your safety is our top priority. Our site uses industry-standard encryption to keep your information protected. Booking is easy — just a few clicks and your confirmation is ready.</p>
+
+            <h2>Support That Cares</h2>
+            <p>Need help? Our dedicated customer support team is available around the clock to answer questions, help with changes, and make sure your experience is smooth from start to finish.</p>
+
+            <h2>Join Thousands of Happy Travellers</h2>
+            <p>More than just a booking — we’re your travel partner. Discover why so many customers trust <strong>World Hotels</strong> for all their stays.</p>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Bookings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='projectMainPagecss.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='my_bookings.css') }}">
+</head>
+<body>
+
+<!-- Sidebar Navigation -->
+<nav class="sidebar-nav">
+    <a href="/"><img src="{{ url_for('static', filename='stimages/W_logo.jpg') }}" class="logo"></a>
+    <div class="navbar" id="Navlinks">
+        <ul>
+            <li><a href="/">Home</a></li>
+            {% if 'user_id' in session %}
+                <li><a href="/logout">Logout</a></li>
+                {% if session['role'] == 'admin' %}
+                    <li><a href="/admin_dashboard">Admin Dashboard</a></li>
+                    <li><a href="/manage_hotels">Manage Hotels</a></li>
+                    <li><a href="/manage_bookings">Manage Bookings</a></li>
+                    <li><a href="/manage_users">Manage Users</a></li>
+                {% endif %}
+                <li><a href="/my_bookings">My Bookings</a></li>
+            {% else %}
+                <li><a href="/login.html">Login/Register</a></li>
+            {% endif %}
+            <li><a href="/Information.html">Information</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div class="main-wrapper">
+    <div class="booking-table-container">
+        <h1>My Bookings</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Hotel Name</th>
+                    <th>Room ID</th>
+                    <th>Check-in</th>
+                    <th>Check-out</th>
+                    <th>Guests</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr>
+                    <td>{{ booking[0] }}</td>
+                    <td>{{ booking[7] }}</td>
+                    <td>{{ booking[2] }}</td>
+                    <td>{{ booking[3] }}</td>
+                    <td>{{ booking[4] }}</td>
+                    <td>{{ booking[5] }}</td>
+                    <td>{{ booking[6] }}</td>
+                    <td>
+                        {% if booking[6] != 'Cancelled' and booking[6] != 'Completed' %}
+                        <form method="post" action="/cancel_booking" onsubmit="return confirmCancellation(event, '{{ booking[0] }}');">
+                            <input type="hidden" name="booking_id" value="{{ booking[0] }}">
+                            <button type="submit" class="cancel-btn">Cancel</button>
+                        </form>
+                        {% else %}—{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="{{ url_for('booking.my_bookings', page=page-1) }}">
+                    <button>Previous</button>
+                </a>
+            {% endif %}
+
+            {% for p in range(1, total_pages + 1) %}
+                <a href="{{ url_for('booking.my_bookings', page=p) }}">
+                    <button class="{% if p == page %}active-page{% endif %}">{{ p }}</button>
+                </a>
+            {% endfor %}
+
+            {% if page < total_pages %}
+                <a href="{{ url_for('booking.my_bookings', page=page+1) }}">
+                    <button>Next</button>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- JS: Handle Cancellation Fee Confirmation -->
+<script>
+function confirmCancellation(event, bookingId) {
+    event.preventDefault();
+
+    fetch(`/check_cancellation_fee?booking_id=${bookingId}`)
+        .then(response => response.json())
+        .then(data => {
+            let fee = data.fee !== null ? parseFloat(data.fee).toFixed(2) : 0;
+            if (confirm(`Cancelling now will charge you £${fee}. Proceed?`)) {
+                event.target.submit();
+            }
+        })
+        .catch(err => {
+            alert("Error fetching cancellation fee.");
+            console.error(err);
+        });
+
+    return false;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Manage Users</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='projectMainPagecss.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='manage_users.css') }}">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar-nav">
+        <a href="/"><img src="{{ url_for('static', filename='stimages/W_logo.jpg') }}" class="logo"></a>
+        <div class="navbar" id="Navlinks">
+            <ul>
+                <li><a href="/">Home</a></li>
+                {% if 'user_id' in session %}
+                    <li><a href="/logout">Logout</a></li>
+                    {% if session['role'] == 'admin' %}
+                        <li><a href="/admin_dashboard">Admin Dashboard</a></li>
+                        <li><a href="/manage_hotels">Manage Hotels</a></li>
+                        <li><a href="/manage_bookings">Manage Bookings</a></li>
+                        <li><a href="/manage_users">Manage Users</a></li>
+                    {% endif %}
+                    <li><a href="/my_bookings">My Bookings</a></li>
+                {% else %}
+                    <li><a href="/login.html">Login/Register</a></li>
+                {% endif %}
+                <li><a href="/Information.html">Information</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Manage Users Table -->
+    <div class="main-wrapper">
+        <div class="user-table-container">
+            <h1>Manage Users</h1>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash {{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user[0] }}</td>
+                        <td>{{ user[1] }}</td>
+                        <td>{{ user[2] }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('admin.change_role', user_id=user[0]) }}" class="inline">
+                                <select name="role">
+                                    <option value="user" {% if user[3] == 'user' %}selected{% endif %}>User</option>
+                                    <option value="admin" {% if user[3] == 'admin' %}selected{% endif %}>Admin</option>
+                                </select>
+                                <button type="submit" class="btn-action">Update</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="POST" action="{{ url_for('admin.delete_user', user_id=user[0]) }}" class="inline" onsubmit="return confirm('Delete this user?');">
+                                <button type="submit" class="btn-action">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

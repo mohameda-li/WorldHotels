@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Edit Booking</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='edit_booking.css') }}">
+</head>
+<body>
+
+<!-- Sidebar Navigation -->
+<nav class="sidebar-nav">
+    <a href="/"><img src="{{ url_for('static', filename='stimages/W_logo.jpg') }}" class="logo"></a>
+    <div class="navbar" id="Navlinks">
+        <ul>
+            <li><a href="/">Home</a></li>
+            {% if 'user_id' in session %}
+                <li><a href="/logout">Logout</a></li>
+                {% if session['role'] == 'admin' %}
+                    <li><a href="/admin_dashboard">Admin Dashboard</a></li>
+                    <li><a href="/manage_hotels">Manage Hotels</a></li>
+                    <li><a href="/manage_bookings">Manage Bookings</a></li>
+                    <li><a href="/manage_users">Manage Users</a></li>
+                {% endif %}
+                <li><a href="/my_bookings">My Bookings</a></li>
+            {% else %}
+                <li><a href="/login.html">Login/Register</a></li>
+            {% endif %}
+            <li><a href="/Information.html">Information</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Edit Booking Form -->
+<div class="main-wrapper">
+    <div class="form-container">
+        <h1>Edit Booking</h1>
+        <form method="POST" action="{{ url_for('admin.edit_booking', booking_id=booking_id) }}">
+            <input type="number" name="roomID" value="{{ booking[0] }}" required>
+            <input type="date" name="checkIn" value="{{ booking[1] }}" required>
+            <input type="date" name="checkOut" value="{{ booking[2] }}" required>
+            <input type="number" name="noOfGuests" value="{{ booking[3] }}" required>
+            <select name="status" required>
+                <option value="Pending" {% if booking[4] == 'Pending' %}selected{% endif %}>Pending</option>
+                <option value="Confirmed" {% if booking[4] == 'Confirmed' %}selected{% endif %}>Confirmed</option>
+                <option value="Cancelled" {% if booking[4] == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+            </select>
+            <button type="submit">Update Booking</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

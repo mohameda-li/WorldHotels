@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!-- By Mahamed Ali Student ID:2301846 -->
+<html lang="en">
+<head>
+    <title>World Hotels</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='projectMainPagecss.css') }}">
+</head>
+<body>
+<section class="banner">
+    <!-- Floating Sidebar Nav -->
+    <nav class="sidebar-nav">
+        <a href="/"><img src="{{ url_for('static', filename='stimages/W_logo.jpg') }}" class="logo"></a>
+        <div class="navbar" id="Navlinks">
+            <ul>
+                <li><a href="/">Home</a></li>
+                {% if 'user_id' in session %}
+                    <li><a href="/logout">Logout</a></li>
+                    {% if session['role'] == 'admin' %}
+                        <li><a href="/admin_dashboard">Admin Dashboard</a></li>
+                        <li><a href="/manage_hotels">Manage Hotels</a></li>
+                        <li><a href="/manage_bookings">Manage Bookings</a></li>
+                        <li><a href="/manage_users">Manage Users</a></li>
+                    {% endif %}
+                    <li><a href="/my_bookings">My Bookings</a></li>
+                {% else %}
+                    <li><a href="/login.html">Login/Register</a></li>
+                {% endif %}
+                <li><a href="/Information.html">Information</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Call to Action -->
+    <div class="content" style="background: rgba(0,0,0,0.7); padding: 40px; border-radius: 20px; max-width: 700px; margin: auto;">
+        <h1 style="color: white;">World Hotels</h1>
+        <p style="color: white;">No More Rooms<br>Press the button to search again!</p>
+        <div style="margin-top: 30px;">
+            <a href="/booking"><button type="button"><span></span>BOOK NOW</button></a>
+        </div>
+    </div>
+</section>
+</body>
+</html>

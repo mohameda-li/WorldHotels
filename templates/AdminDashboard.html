@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='projectMainPagecss.css') }}">
+  <style>
+    .admin-buttons a button {
+      background-color: #009688;
+      color: white;
+      font-weight: bold;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin: 10px;
+    }
+
+    .admin-buttons a button:hover {
+      background-color: #00796b;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="banner">
+    <nav>
+      <a href="/"><img src="{{ url_for('static', filename='stimages/W_logo.jpg') }}" class="logo"></a>
+      <div class="navbar" id="Navlinks">
+        <ul>
+          <li><a href="/">Home</a></li>
+          {% if 'user_id' in session %}
+            <li><a href="/logout">Logout</a></li>
+            {% if session['role'] == 'admin' %}
+              <li><a href="/admin_dashboard">Admin Dashboard</a></li>
+              <li><a href="/manage_hotels">Manage Hotels</a></li>
+              <li><a href="/manage_bookings">Manage Bookings</a></li>
+              <li><a href="/manage_users">Manage Users</a></li>
+            {% endif %}
+            <li><a href="/my_bookings">My Bookings</a></li>
+          {% else %}
+            <li><a href="/login.html">Login/Register</a></li>
+          {% endif %}
+          <li><a href="/Information.html">Information</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="content">
+      <h1>Admin Dashboard</h1>
+      <p>Welcome back, Admin! What would you like to do today?</p>
+      <div class="admin-buttons">
+        <a href="/manage_hotels"><button>Manage Hotels</button></a>
+        <a href="/manage_bookings"><button>Manage Bookings</button></a>
+        <a href="/manage_users"><button>Manage Users</button></a>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

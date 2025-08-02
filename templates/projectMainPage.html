@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!-- By Mahamed Ali Student ID:2301846 -->
+<html lang="en">
+<head>
+    <title>World Hotels</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='projectMainPagecss.css') }}">
+</head>
+<body>
+    <section class="banner">
+
+        <!-- Floating Logo + Navigation -->
+        <nav class="sidebar-nav">
+            <a href="/"><img src="{{ url_for('static', filename='stimages/W_logo.jpg') }}" class="logo"></a>
+            <div class="navbar" id="Navlinks">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    {% if 'user_id' in session %}
+                        <li><a href="/logout">Logout</a></li>
+                        {% if session['role'] == 'admin' %}
+                            <li><a href="/admin_dashboard">Admin Dashboard</a></li>
+                            <li><a href="/manage_hotels">Manage Hotels</a></li>
+                            <li><a href="/manage_bookings">Manage Bookings</a></li>
+                            <li><a href="/manage_users">Manage Users</a></li>
+                        {% endif %}
+                        <li><a href="/my_bookings">My Bookings</a></li>
+                    {% else %}
+                        <li><a href="/login.html">Login/Register</a></li>
+                    {% endif %}
+                    <li><a href="/Information.html">Information</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Welcome Message + Button -->
+        <div class="content homepage-message">
+            <h1>World Hotels</h1>
+            <p>Book a room instantly and check in as soon as 2 hours.<br>Press the button to book now!</p>
+            <div>
+                {% if 'user_id' in session %}
+                    <a href="/booking.html"><button type="button"><span></span>BOOK NOW</button></a>
+                {% else %}
+                    <a href="/login.html"><button type="button"><span></span>BOOK NOW</button></a>
+                {% endif %}
+            </div>
+        </div>
+
+    </section>
+</body>
+</html>

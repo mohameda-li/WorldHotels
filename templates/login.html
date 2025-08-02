@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!-- By Mahamed Ali Student ID:2301846 -->
+<html lang="en">
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='projectMainPagecss.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <script>
+        // Auto-hide flash messages after 3 seconds
+        setTimeout(() => {
+            const flash = document.getElementById('flash-message');
+            if (flash) {
+                flash.style.transition = 'opacity 0.5s ease';
+                flash.style.opacity = '0';
+                setTimeout(() => flash.remove(), 500);
+            }
+        }, 3000);
+    </script>
+</head>
+
+<body>
+    <section class="banner">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar-nav">
+            <a href="/"><img src="{{ url_for('static', filename='stimages/W_logo.jpg') }}" class="logo"></a>
+            <div class="navbar" id="Navlinks">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    {% if 'user_id' in session %}
+                        <li><a href="/logout">Logout</a></li>
+                        {% if session['role'] == 'admin' %}
+                            <li><a href="/admin_dashboard">Admin Dashboard</a></li>
+                            <li><a href="/manage_hotels">Manage Hotels</a></li>
+                            <li><a href="/manage_bookings">Manage Bookings</a></li>
+                            <li><a href="/manage_users">Manage Users</a></li>
+                        {% endif %}
+                        <li><a href="/my_bookings">My Bookings</a></li>
+                    {% else %}
+                        <li><a href="/login.html">Login/Register</a></li>
+                    {% endif %}
+                    <li><a href="/Information.html">Information</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div id="flash-message" style="color: red; text-align: center; margin-bottom: 10px;">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+
+        <!-- Login Form -->
+        <div class="content">
+            <h1>Login</h1>
+            <form action="/login.html" method="post" style="max-width: 400px; margin: 0 auto; text-align: left;">
+                <div class="input-box" style="margin: 15px 0;">
+                    <input type="text" name="Username" placeholder="Username" required style="padding: 10px; width: 100%; border-radius: 5px; border: none;">
+                </div>
+                <div class="input-box" style="margin: 15px 0;">
+                    <input type="password" name="password" placeholder="Password" required style="padding: 10px; width: 100%; border-radius: 5px; border: none;">
+                </div>
+                <div class="remember-forgot" style="color: white; font-size: 14px; margin-bottom: 15px;">
+                    <label><input type="checkbox" name="remember"> Remember me</label>
+                    <a href="/ForgotPassword.html" style="color: #009688; float: right;">Forgot password?</a>
+                </div>
+                {% if error %}
+                    <div class="error-message" style="color: red; margin-top: 10px;">{{ error }}</div>
+                {% endif %}
+                <div class="input-box" style="text-align: center;">
+                    <input type="submit" value="Submit" style="padding: 10px 20px; border: none; border-radius: 25px; background: #009688; color: white; font-weight: bold; cursor: pointer;">
+                </div>
+                <div class="register-link" style="margin-top: 20px; color: white; text-align: center;">
+                    <p>Don't have an account? <a href="/signUp.html" style="color: #009688;">Register</a></p>
+                </div>
+            </form>
+        </div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Booking Complete</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='projectMainPagecss.css') }}">
+</head>
+
+<body>
+  <section class="banner">
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar-nav">
+      <a href="/"><img src="{{ url_for('static', filename='stimages/W_logo.jpg') }}" class="logo"></a>
+      <div class="navbar" id="Navlinks">
+        <ul>
+          <li><a href="/">Home</a></li>
+          {% if 'user_id' in session %}
+            <li><a href="/logout">Logout</a></li>
+            {% if session['role'] == 'admin' %}
+              <li><a href="/admin_dashboard">Admin Dashboard</a></li>
+              <li><a href="/manage_hotels">Manage Hotels</a></li>
+              <li><a href="/manage_bookings">Manage Bookings</a></li>
+              <li><a href="/manage_users">Manage Users</a></li>
+            {% endif %}
+            <li><a href="/my_bookings">My Bookings</a></li>
+          {% else %}
+            <li><a href="/login.html">Login/Register</a></li>
+          {% endif %}
+          <li><a href="/Information.html">Information</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Confirmation Content -->
+    <div class="content">
+      <h1>Booking Confirmed!</h1>
+      <p>Thank you for booking with <strong>World Hotels</strong>.</p>
+      <p>Your booking has been successfully processed.</p>
+
+      <div class="confirmation-box">
+        <p><strong>Room Number:</strong> {{ room_number }}</p>
+        <p><strong>Check-in:</strong> {{ check_in }}</p>
+        <p><strong>Check-out:</strong> {{ check_out }}</p>
+        <p><strong>Guests:</strong> {{ guests }}</p>
+        <p><strong>Total Paid:</strong> {{ total_price }} {{ currency }}</p>
+        <p><strong>Receipt ID:</strong> {{ receipt_id }}</p>
+        <p><strong>Payment Date:</strong> {{ payment_date }}</p>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <a href="/my_bookings"><button type="button">View My Bookings</button></a>
+        <a href="/"><button type="button">Return Home</button></a>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

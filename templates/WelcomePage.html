@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!-- By Mahamed Ali Student ID:2301846 -->
+<html lang="en">
+<head>
+    <title>Welcome</title>
+    <link rel="stylesheet" href="static/projectMainPagecss.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/projectMainPagecss.css') }}">
+</head>
+<body>
+  <section class="banner">
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar-nav">
+      <a href="/"><img src="{{ url_for('static', filename='stimages/W_logo.jpg') }}" class="logo"></a>
+      <div class="navbar" id="Navlinks">
+        <ul>
+          <li><a href="/">Home</a></li>
+          {% if 'user_id' in session %}
+            <li><a href="/logout">Logout</a></li>
+            {% if session['role'] == 'admin' %}
+              <li><a href="/admin_dashboard">Admin Dashboard</a></li>
+              <li><a href="/manage_hotels">Manage Hotels</a></li>
+              <li><a href="/manage_bookings">Manage Bookings</a></li>
+              <li><a href="/manage_users">Manage Users</a></li>
+            {% endif %}
+            <li><a href="/my_bookings">My Bookings</a></li>
+          {% else %}
+            <li><a href="/login.html">Login/Register</a></li>
+          {% endif %}
+          <li><a href="/Information.html">Information</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Welcome Message -->
+    <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+      <div class="booking-table-container" style="width: 500px; background-color: rgba(0, 0, 0, 0.7); padding: 40px; border-radius: 15px;">
+        <h1 style="text-align: center; color: white;">Thanks for making an account!</h1>
+        <p style="text-align: center; color: white; font-size: 18px;">
+          Welcome, <strong>{{ session['username'] }}</strong>!<br>
+          You can now explore and book rooms.
+        </p>
+        <div style="text-align: center; margin-top: 20px;">
+          <a href="/"><button class="bttn">Go to Home</button></a>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

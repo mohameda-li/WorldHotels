@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Booking</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='projectMainPagecss.css') }}">
+  <style>
+    button {
+      background-color: #009688;
+      color: white;
+      font-weight: bold;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #00796b;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="banner">
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar-nav">
+      <a href="/"><img src="{{ url_for('static', filename='stimages/W_logo.jpg') }}" class="logo"></a>
+      <div class="navbar" id="Navlinks">
+        <ul>
+          <li><a href="/">Home</a></li>
+          {% if 'user_id' in session %}
+            <li><a href="/logout">Logout</a></li>
+            {% if session['role'] == 'admin' %}
+              <li><a href="/admin_dashboard">Admin Dashboard</a></li>
+              <li><a href="/manage_hotels">Manage Hotels</a></li>
+              <li><a href="/manage_bookings">Manage Bookings</a></li>
+              <li><a href="/manage_users">Manage Users</a></li>
+            {% endif %}
+            <li><a href="/my_bookings">My Bookings</a></li>
+          {% else %}
+            <li><a href="/login.html">Login/Register</a></li>
+          {% endif %}
+          <li><a href="/Information.html">Information</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Booking Form -->
+    <div class="content">
+      <h1>Book a Room</h1>
+      <form id="bookingForm" method="post" action="/booking" style="max-width: 500px; margin: 0 auto; text-align: left;">
+        <div class="input-box" style="margin: 15px 0;">
+          <label>Choose a hotel:</label>
+          <select id="hotel" name="hotel_id" required style="padding: 10px; width: 100%; border-radius: 5px; border: none;">
+            {% for hotel_id, hotel_name in hotels %}
+              <option value="{{ hotel_id }}">{{ hotel_name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="input-box" style="margin: 15px 0;">
+          <label>Room Type:</label>
+          <select id="roomType" name="roomType" required style="padding: 10px; width: 100%; border-radius: 5px; border: none;">
+            <option value="1">Standard</option>
+            <option value="2">Double</option>
+            <option value="3">Family</option>
+          </select>
+        </div>
+
+        <div class="input-box" style="margin: 15px 0;">
+          <label>Check-in Date:</label>
+          <input type="date" id="check-in" name="check-in" required style="padding: 10px; width: 100%; border-radius: 5px; border: none;">
+        </div>
+
+        <div class="input-box" style="margin: 15px 0;">
+          <label>Check-out Date:</label>
+          <input type="date" id="check-out" name="check-out" required style="padding: 10px; width: 100%; border-radius: 5px; border: none;">
+        </div>
+
+        <input type="hidden" id="booking-date" name="booking-date">
+
+        <div class="input-box" style="margin: 15px 0;">
+          <label>Number of Guests:</label>
+          <input type="number" id="guests" name="noOfGuests" required style="padding: 10px; width: 100%; border-radius: 5px; border: none;">
+        </div>
+
+        <div class="input-box" style="text-align: center;">
+          <button type="button" id="check-price-btn">Check Price</button>
+        </div>
+
+        <div id="price-summary" style="color: white; margin-top: 10px; text-align: center;"></div><br>
+
+        <div class="input-box" style="text-align: center;">
+          <button type="submit">Confirm Booking</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const threeMonthsAhead = new Date(today);
+      threeMonthsAhead.setMonth(today.getMonth() + 3);
+
+      const checkInEl = document.getElementById('check-in');
+      const checkOutEl = document.getElementById('check-out');
+      const bookingDateEl = document.getElementById('booking-date');
+      const guestsEl = document.getElementById('guests');
+      const roomTypeEl = document.getElementById('roomType');
+
+      const minDate = today.toISOString().split('T')[0];
+      const maxDate = threeMonthsAhead.toISOString().split('T')[0];
+
+      checkInEl.min = checkOutEl.min = minDate;
+      checkInEl.max = checkOutEl.max = maxDate;
+      bookingDateEl.value = minDate;
+
+      roomTypeEl.addEventListener('change', function () {
+        let maxGuests = 1;
+        if (this.value === '2') maxGuests = 2;
+        else if (this.value === '3') maxGuests = 4;
+        guestsEl.max = maxGuests;
+      });
+      roomTypeEl.dispatchEvent(new Event('change'));
+
+      document.getElementById('bookingForm').addEventListener('submit', function (event) {
+        const checkIn = new Date(checkInEl.value);
+        const checkOut = new Date(checkOutEl.value);
+        const duration = (checkOut - checkIn) / (1000 * 3600 * 24);
+
+        if (checkIn < today || checkIn > threeMonthsAhead) {
+          alert('Check-in date must be between today and three months ahead.');
+          event.preventDefault();
+        } else if (checkOut <= checkIn || checkOut > threeMonthsAhead) {
+          alert('Check-out must be after check-in and within 3 months.');
+          event.preventDefault();
+        } else if (duration > 30) {
+          alert('Bookings cannot exceed 30 days.');
+          event.preventDefault();
+        }
+      });
+
+      $('#hotel').change(function () {
+        const hotelID = $(this).val();
+        $.post('/get-room-types', { hotel_id: hotelID }, function (response) {
+          $('#roomType').html(response);
+          roomTypeEl.dispatchEvent(new Event('change'));
+        });
+      });
+
+      document.getElementById('check-price-btn').addEventListener('click', function () {
+        const hotelSelectEl = document.getElementById('hotel');
+
+        const params = new URLSearchParams({
+          roomTypeId: roomTypeEl.value,
+          checkInDate: checkInEl.value,
+          checkOutDate: checkOutEl.value,
+          guests: guestsEl.value,
+          hotelName: hotelSelectEl.options[hotelSelectEl.selectedIndex].text
+        });
+
+        if (!checkInEl.value || !checkOutEl.value || !guestsEl.value) {
+          alert('Please fill in all fields to calculate price.');
+          return;
+        }
+
+        fetch(`/calculate_price?${params.toString()}`)
+          .then(response => response.json())
+          .then(data => {
+            if (data.error) {
+              document.getElementById('price-summary').innerHTML =
+                `<span style="color: red;">${data.error}</span>`;
+            } else {
+              document.getElementById('price-summary').innerHTML = `
+                Total Price: £${data.total_price.toFixed(2)}<br>
+                After Discount: £${data.discounted_price.toFixed(2)}
+              `;
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('price-summary').innerHTML =
+              `<span style="color: red;">Could not fetch price.</span>`;
+          });
+      });
+    });
+  </script>
+</body>
+</html>

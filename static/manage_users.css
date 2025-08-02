@@ -1,0 +1,101 @@
+/* manage_users.css */
+
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background-image: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)), url("/static/stimages/Hotel.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
+}
+
+.main-wrapper {
+    margin-left: 240px;
+    padding: 40px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-table-container {
+    width: 100%;
+    max-width: 1000px;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.6);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    color: black;
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+}
+
+thead {
+    background-color: #009688;
+    color: white;
+}
+
+form.inline {
+    display: inline-block;
+}
+
+.btn-action {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: #009688;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-action:hover {
+    background-color: #00796b;
+}
+
+/* Responsive Styling for Mobile */
+@media only screen and (max-width: 480px) {
+    .main-wrapper {
+        padding: 20px;
+        margin-left: 0;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    th, td {
+        padding: 8px;
+    }
+
+    .user-table-container {
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .btn-action {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+}
