@@ -14,7 +14,7 @@ WorldHotels is a full-stack web application built using Flask and MySQL, designe
 - Containerized using Docker and Docker Compose
 
 ---
-### UI Preview
+### 🔎 UI Preview
 
 **Booking Main Page:**
 
